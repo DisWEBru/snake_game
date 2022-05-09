@@ -6,7 +6,9 @@
     dw.cube_count = 12
     dw.move_time_start = 500
 
-    /**
+    dw.move_timeout = false
+
+        /**
      * Случайное число от и до не включая последнее число
      * @param int начальное число
      * @param int конечное, которое не включается
@@ -35,19 +37,7 @@
             else
                 return
 
-            if (dw.direction_last == 'up') {
-                if (direction != 'down')
-                    dw.direction = direction
-            } else if (dw.direction_last == 'down') {
-                if (direction != 'up')
-                    dw.direction = direction
-            } else if (dw.direction_last == 'left') {
-                if (direction != 'right')
-                    dw.direction = direction
-            } else if (dw.direction_last == 'right') {
-                if (direction != 'left')
-                    dw.direction = direction
-            }
+            dw.turn(direction)
         })
 
         dw.place = document.body.querySelector('.game__place')
@@ -65,30 +55,48 @@
         dw.btn_up = document.body.querySelector('.game__control-up i')
 
         dw.btn_up.addEventListener('click', function () {
-            if (dw.direction_last != 'down')
-                dw.direction = 'up'
+            dw.turn('up')
         })
 
         dw.btn_down = document.body.querySelector('.game__control-down i')
 
         dw.btn_down.addEventListener('click', function () {
-            if (dw.direction_last != 'up')
-                dw.direction = 'down'
+            dw.turn('down')
         })
 
         dw.btn_left = document.body.querySelector('.game__control-left i')
 
         dw.btn_left.addEventListener('click', function () {
-            if (dw.direction_last != 'right')
-                dw.direction = 'left'
+            dw.turn('left')
         })
 
         dw.btn_right = document.body.querySelector('.game__control-right i')
 
         dw.btn_right.addEventListener('click', function () {
-            if (dw.direction_last != 'left')
-                dw.direction = 'right'
+            dw.turn('right')
         })
+    }
+
+    dw.turn = function (direction) {
+        if (dw.direction_last == 'up') {
+            if (direction != 'down')
+                dw.direction = direction
+        } else if (dw.direction_last == 'down') {
+            if (direction != 'up')
+                dw.direction = direction
+        } else if (dw.direction_last == 'left') {
+            if (direction != 'right')
+                dw.direction = direction
+        } else if (dw.direction_last == 'right') {
+            if (direction != 'left')
+                dw.direction = direction
+        }
+
+        if (dw.move_timeout !== false) {
+            clearTimeout(dw.move_timeout)
+
+            dw.move()
+        }
     }
 
     dw.start = function () {
@@ -274,7 +282,7 @@
 
         dw.direction_last = dw.direction
 
-        setTimeout(function () {
+        dw.move_timeout = setTimeout(function () {
             dw.move()
         }, dw.move_time)
     }
